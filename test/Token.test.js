@@ -58,7 +58,7 @@ require('chai')
         console.log("receiver balance before trnasfer", balanceOf.toString());
 
         // transfer
-        await token.transfer(reverse, '1000000000000000000', { from: deployer })
+        await token.transfer(receiver, '1000000000000000000', { from: deployer })
 
         // after transfer
         balanceOf = await token.balanceOf(deployer);

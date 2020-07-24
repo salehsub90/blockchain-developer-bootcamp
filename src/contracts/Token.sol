@@ -1,6 +1,9 @@
 pragma solidity ^0.5.0;
 
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+
 contract Token {
+  using SafeMath for uint;
   string public name = "DApp Token";
   string public symbol = "DApp";
   uint256 public decimals = 18;
@@ -22,3 +25,4 @@ contract Token {
     balanceOf[_to] = balanceOf[_to].add(_value);
     return true;
   }
+}
