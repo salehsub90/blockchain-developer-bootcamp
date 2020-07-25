@@ -1,4 +1,4 @@
-const { reverse } = require('lodash');
+import { tokens } from './helpers';
 
 /* eslint-disable no-undef */
 const Token = artifacts.require('./Token')
@@ -11,7 +11,7 @@ require('chai')
     const name = 'DApp Token';
     const symbol = 'DApp';
     const decimals = '18';
-    const totalSupply = '1000000000000000000000000';
+    const totalSupply = tokens(1000000).toString();
     let token;
 
     beforeEach(async () => {
@@ -39,33 +39,58 @@ require('chai')
 
       it('tracks the total supply', async () => {
         const result = await token.totalSupply();
-        result.toString().should.equal(totalSupply)
+        result.toString().should.equal(totalSupply.toString())
       })
 
       it('assigns total supply to the deployer', async () => {
         const result = await token.balanceOf(deployer);
-        result.toString().should.equal(totalSupply)
+        result.toString().should.equal(totalSupply.toString())
       })
     })
 
     describe('sending tokens', () => {
-      it('transfers token balances', async () => {
-        let balanceOf
-        // before transfer
-        balanceOf = await token.balanceOf(deployer);
-        console.log("deployer balance before transfer", balanceOf.toString());
-        balanceOf = await token.balanceOf(receiver);
-        console.log("receiver balance before trnasfer", balanceOf.toString());
+      let result;
+      let amount;
 
-        // transfer
-        await token.transfer(receiver, '1000000000000000000', { from: deployer })
+      beforeEach(async () => {
+        amount = tokens(100);
+        result = await token.transfer(receiver, amount, { from: deployer })        
+      })
 
-        // after transfer
-        balanceOf = await token.balanceOf(deployer);
-        console.log("deployer balance after transfer", balanceOf.toString());
-        balanceOf = await token.balanceOf(receiver);
-        console.log("receiver balance after trnasfer", balanceOf.toString());
+      describe('success', async () => {
+        it('transfers token balances', async () => {
+          let balanceOf
+          // before transfer
+          //balanceOf = await token.balanceOf(deployer);
+          //console.log("deployer balance before transfer", balanceOf.toString());
+          //balanceOf = await token.balanceOf(receiver);
+          //console.log("receiver balance before trnasfer", balanceOf.toString());
+  
+          // transfer
+          balanceOf = await token.balanceOf(deployer);
+          balanceOf.toString().should.equal(tokens(999900).toString());
+          balanceOf = await token.balanceOf(receiver);
+          balanceOf.toString().should.equal(tokens(100).toString());
+        })
+  
+        it('emits a transfer event', async () => {
+          const log = result.logs[0];
+          log.event.should.equal('Transfer');
+          const event = log.args
+          event.from.toString().should.equal(deployer, 'from is correct');
+          event.to.toString().should.equal(receiver, 'to is correct');
+          event.value.toString().should.equal(amount.toString(), 'value is correct');
+          //console.log(result.logs);
+        })
+      })
 
+      // need to test for failures inside of tests and
+      // implement a failure check inside the transfer function
+
+      describe('failure', async () => {
+        it('rejects insufficient balances', async () => {
+
+        })
       })
     })
 })
