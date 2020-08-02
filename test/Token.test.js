@@ -1,4 +1,4 @@
-import { tokens } from './helpers';
+import { tokens, EVM_REVERT } from './helpers';
 
 /* eslint-disable no-undef */
 const Token = artifacts.require('./Token')
@@ -89,7 +89,19 @@ require('chai')
 
       describe('failure', async () => {
         it('rejects insufficient balances', async () => {
-
+          let invalidAmount
+          //invalidAmount = tokens(100000000) // 100 million - greater than total supply
+          //console.log("receiver --  " + receiver);
+          //console.log("deployer --  " + deployer);
+          //await token.transfer(receiver, invalidAmount, { from: deployer }).should.be.rejectedWith(EVM_REVERT)
+  
+          // Attempt transfer tokens, when you have none
+          invalidAmount = tokens(0) // recipient has no tokens
+          console.log(receiver);
+          await token.transfer(receiver, invalidAmount, { from: deployer }).should.be.rejectedWith(EVM_REVERT)
+        })
+        it('rejects invalid recipients', async () => {
+          await token.transfer(0x0, amount, { from: deployer }).should.be.rejected
         })
       })
     })
