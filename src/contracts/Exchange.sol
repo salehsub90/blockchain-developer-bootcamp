@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 
 import "./Token.sol";
 
+
 //TODO:
 // [x] set the fee account
 // [] Deposit Ether
@@ -17,9 +18,16 @@ import "./Token.sol";
 
 
 contract Exchange {
+  using SafeMath for uint;
+
   // variable
   address public feeAccount; // account receives exchange fees
   uint256 public feePercent; // the fee percentage
+
+  mapping(address => mapping(address => uint256)) public tokens;
+
+  //Events
+  event Deposit(address token, address user, uint256 amount, uint256 balance);
 
   constructor(address _feeAccount, uint256 _feePercent) public {
     feeAccount = _feeAccount;
@@ -27,12 +35,13 @@ contract Exchange {
   }
 
   function depositToken(address _token, uint256 _amount) public {
-    // which token
-    // how much
-    // send token to this contract
-    // gets a copy of the token and trsnfer it
-    Token(_token).transferFrom(msg.sender, address(this), _amount)
-    // manage deposit
+    //TODO: Don't allow ether deposits
+    
+    // gets a copy of the token and transfer it
+    require(Token(_token).transferFrom(msg.sender, address(this), _amount));
+    tokens[_token][msg.sender] = tokens[_token][msg.sender].add(_amount);
+
     // emit the event
+    emit Deposit(_token, msg.sender, _amount, tokens[_token][msg.sender]);
   }
 }
