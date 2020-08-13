@@ -6,9 +6,9 @@ import "./Token.sol";
 
 //TODO:
 // [x] set the fee account
-// [] Deposit Ether
+// [x] Deposit Ether
 // [] Withdrw Ether
-// [] Deposit tokens
+// [x] Deposit tokens
 // [] Withdraw tokens
 // [] Check Balances
 // [] Make order
@@ -24,6 +24,9 @@ contract Exchange {
   address public feeAccount; // account receives exchange fees
   uint256 public feePercent; // the fee percentage
 
+  // allows to store ether in tokens mapping with blank address
+  address constant ETHER = address(0);
+
   mapping(address => mapping(address => uint256)) public tokens;
 
   //Events
@@ -34,9 +37,22 @@ contract Exchange {
     feePercent = _feePercent;
   }
 
+  // fallback: reverts if Ether is sent to this smart contract yb mistake.
+  function() external {
+    revert();
+  }
+
+
+  //in  order for a function to accept Ether, add Payable
+  function depositEther() payable public {
+    tokens[ETHER][msg.sender] = tokens[ETHER][msg.sender].add(msg.value);
+    emit Deposit(ETHER, msg.sender, msg.value, tokens[ETHER][msg.sender]);
+  }
+
+  
   function depositToken(address _token, uint256 _amount) public {
     //TODO: Don't allow ether deposits
-    
+    require(_token != ETHER);
     // gets a copy of the token and transfer it
     require(Token(_token).transferFrom(msg.sender, address(this), _amount));
     tokens[_token][msg.sender] = tokens[_token][msg.sender].add(_amount);
