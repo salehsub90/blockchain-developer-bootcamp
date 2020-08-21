@@ -12,7 +12,7 @@ import "./Token.sol";
 // [x] Withdraw tokens
 // [x] Check Balances
 // [x] Make order // need to model the order
-// [] Cancel order
+// [x] Cancel order
 // [] Fill order
 // [] charge fees
 
@@ -132,5 +132,26 @@ contract Exchange {
     orderCancelled[_id] = true;
 
     emit Cancel(_id, msg.sender, _order.tokenGet, _order.amountGet, _order.tokenGive, _order.amountGive, now);
+  }
+
+  function fillOrder(uint256 _id) public {
+    _Order storage _order = orders[_id]; // fetch the order from storage
+    _trade(_order.id, _order.user, _order.tokenGet, _order.amountGet, _order.tokenGive, _order.amountGive);
+
+    // mark as filled
+  }
+
+  // execute trade
+  // charge fees
+  // Emit a trade event
+  function _trade(uint256 _orderId, 
+    address _user, address _tokenGet, 
+    uint256 _amountGet, address _tokenGive, 
+    uint256 _amountGive) internal {
+
+      // msg.sender is the user who is filling the order
+      // _user is the user who created the order
+      
+      
   }
 }
