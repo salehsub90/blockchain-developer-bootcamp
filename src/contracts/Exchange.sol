@@ -13,8 +13,8 @@ import "./Token.sol";
 // [x] Check Balances
 // [x] Make order // need to model the order
 // [x] Cancel order
-// [] Fill order
-// [] charge fees
+// [x] Fill order
+// [x] charge fees
 
 
 contract Exchange {
