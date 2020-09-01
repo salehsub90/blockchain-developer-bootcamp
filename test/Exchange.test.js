@@ -1,6 +1,4 @@
-import { ether, tokens, EVM_REVERT, ETHER_ADDRESS} from './helpers';
-import { version } from 'chai';
-import { invalid } from 'moment';
+import { ether, tokens, EVM_REVERT, ETHER_ADDRESS } from './helpers';
 
 /* eslint-disable no-undef */
 const Token = artifacts.require('./Token')
