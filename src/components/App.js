@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import './App.css';
+import Web3 from 'web3';
+import Token from '../abis/Token.json'
 
-const Web3 = require('web3');
 class App extends Component {
   componentWillMount() {
     this.loadBlockChainData(); 
   }
 
   async loadBlockChainData() {
-    let web3 = new Web3(Web3.givenProvider || 'http://localhost:7545')
+    const web3 = new Web3(Web3.givenProvider || 'http://localhost:7545')
     const network = await web3.eth.net.getNetworkType()
-    //const accounts = await Web3.eth.getAccounts();
-    //console.log('accounts', accounts);
-    console.log('network', network);
+    const accounts = await web3.eth.getAccounts();
+    console.log("Toekn", Token); 
   }
 
   render() {
