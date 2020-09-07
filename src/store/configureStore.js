@@ -15,4 +15,3 @@ export default function configureStore(preloadedState) {
     composeEnhancers(applyMiddleware(...middleware, loggerMiddleware))
   )
 }
-

@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 import './App.css';
 import Web3 from 'web3';
 import { connect } from 'react-redux';
-import Token from '../abis/Token.json'
-import { loadWeb3 } from '../store/interactions';
+import Token from '../abis/Token.json';
+import { loadWeb3, loadAccount, loadToken } from '../store/interactions';
 
 class App extends Component {
   componentWillMount() {
@@ -12,15 +13,15 @@ class App extends Component {
 
   async loadBlockChainData(dispatch) {
     const web3 = loadWeb3(dispatch);
-    const network = await web3.eth.net.getNetworkType()
+    const network = await web3.eth.net.getNetworkType();
     const networkId = await web3.eth.net.getId();
-    const accounts = await web3.eth.getAccounts();
-    const token = new web3.eth.Contract(Token.abi, Token.networks[networkId].address)
-    const totalSupply = await token.methods.totalSupply().call();
-    console.log("totalSupply", totalSupply);
+    const accounts = await loadAccount(web3, dispatch);
+    const token = loadToken(web3, networkId, dispatch);
 
+    //console.log("totalSupply", totalSupply);
     //console.log("abi", Token.abi);
     //console.log("address", Token.networks[networkId].address); 
+    //console.log("accounts", accounts); 
   }
 
   render() {
@@ -116,7 +117,7 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
-
+    // TODO: Fill me in...
   }
 }
 
