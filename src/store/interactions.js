@@ -1,9 +1,11 @@
 import Web3 from 'web3';
 import Token from '../abis/Token.json';
+import Exchange from '../abis/Exchange.json';
 import {
   web3Loaded,
   web3AccountLoaded,
-  TokenLoaded
+  TokenLoaded,
+  ExchangeLoaded
 } from './actions'
 
 export const loadWeb3 = (dispatch) => {
@@ -25,7 +27,20 @@ export const loadToken = async (web3, networkId, dispatch) => {
     dispatch(TokenLoaded(token));
     return token;
   } catch (err) {
-    window.alert('Contract not deployed to te urrectnetwork Please select another network with MediaStreamTrackAudioSourceNode.');
+    window.alert('Contract not deployed to the current network Please select another network with Metamask.');
     return null;
   }
 }
+
+export const loadExchange = async (web3, networkId, dispatch) => {
+  try {
+    const exchange = new web3.eth.Contract(Exchange.abi, Exchange.networks[networkId].address);
+    dispatch(ExchangeLoaded(exchange));
+    return exchange;
+  } catch (err) {
+    window.alert('Contract not deployed to the current network Please select another network with Metamask.');
+    return null;
+  }
+}
+
+

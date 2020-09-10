@@ -1,3 +1,4 @@
+// Web3
 export function web3Loaded(connection) {
   return {
     type: 'WEB3_LOADED',
@@ -12,9 +13,18 @@ export function web3AccountLoaded(account) {
   }
 }
 
-export function TokenLoaded(account) {
+// Token
+export function TokenLoaded(contract) {
   return {
     type: 'TOKEN_LOADED',
-    account
+    contract
+  }
+}
+
+// Exchange
+export function ExchangeLoaded(exchange) {
+  return {
+    type: 'EXCHANGE_LOADED',
+    exchange
   }
 }
