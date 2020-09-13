@@ -27,7 +27,7 @@ export const loadToken = async (web3, networkId, dispatch) => {
     dispatch(TokenLoaded(token));
     return token;
   } catch (err) {
-    window.alert('Contract not deployed to the current network Please select another network with Metamask.');
+    //console.log('Contract not deployed to the current network Please select another network with Metamask.');
     return null;
   }
 }
@@ -38,7 +38,7 @@ export const loadExchange = async (web3, networkId, dispatch) => {
     dispatch(ExchangeLoaded(exchange));
     return exchange;
   } catch (err) {
-    window.alert('Contract not deployed to the current network Please select another network with Metamask.');
+    //console.log('Contract not deployed to the current network Please select another network with Metamask.');
     return null;
   }
 }

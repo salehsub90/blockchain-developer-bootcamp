@@ -10,6 +10,7 @@ import {
   loadToken, 
   loadExchange 
 } from '../store/interactions';
+import { contractsLoadedSelector } from '../store/selectors';
 
 class App extends Component {
   componentWillMount() {
@@ -18,31 +19,35 @@ class App extends Component {
 
   async loadBlockChainData(dispatch) {
     const web3 = loadWeb3(dispatch);
-    const network = await web3.eth.net.getNetworkType();
+    await web3.eth.net.getNetworkType();
     const networkId = await web3.eth.net.getId();
-    const accounts = await loadAccount(web3, dispatch);
-    const token = loadToken(web3, networkId, dispatch);
-    const exchange = loadExchange(web3, networkId, dispatch);
-    
-    //console.log("totalSupply", totalSupply);
-    //console.log("abi", Token.abi);
-    //console.log("address", Token.networks[networkId].address); 
-    //console.log("accounts", accounts); 
+    await loadAccount(web3, dispatch);
+    const token = await loadToken(web3, networkId, dispatch);
+    if (!token) {
+      window.alert('Token smart contract not detected on the current network. Please select another network with Metatmask.');
+      return;
+    }
+    const exchange = await loadExchange(web3, networkId, dispatch);
+    if (!exchange) {
+      window.alert('Token smart contract not detected on the current network. Please select another network with Metatmask.');
+      return;
+    }
   }
 
   render() {
     return (
       <div>
         <Navbar />
-        <Content />
+        {this.props.contractsLoadedSelector ? <Content /> : <div className="content"></div>}
       </div>
     );
   }
 }
 
 function mapStateToProps(state) {
+  console.log("contractsloaded?", contractsLoadedSelector(state))
   return {
-    // todo fill me in
+    contractsLoadedSelector: contractsLoadedSelector(state)
   }
 }
 
