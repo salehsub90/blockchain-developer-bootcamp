@@ -28,3 +28,11 @@ export function ExchangeLoaded(exchange) {
     exchange
   }
 }
+
+//Cancelled Orders
+export function cancelledOredersLoaded(cancelledOrders) {
+  return {
+    type: 'CANCELLED_ORDERS_LOADED',
+    cancelledOrders
+  }
+}
