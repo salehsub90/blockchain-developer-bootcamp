@@ -6,7 +6,9 @@ import {
   web3AccountLoaded,
   TokenLoaded,
   ExchangeLoaded,
-  cancelledOredersLoaded
+  cancelledOredersLoaded,
+  filledOrdersLoaded,
+  allOrdersLoaded
 } from './actions'
 
 export const loadWeb3 = (dispatch) => {
@@ -53,8 +55,14 @@ export const loadAllOrders = async (exchange, dispatch) => {
   dispatch(cancelledOredersLoaded(cancelledOreders));
 
   // fetch filled orders with "Trade" event stream
+  const tradeStream = await exchange.getPastEvents('Trade', { fromBlock: 0, toBlock: 'latest' })
+  const filledOrders = tradeStream.map((event) => event.returnValues)
+  dispatch(filledOrdersLoaded(filledOrders));
 
   // fetch all orders with the "Order" event stream
+  const orderStream = await exchange.getPastEvents('Order', { fromBlock: 0, toBlock: 'latest' })
+  const allOrders = orderStream.map((event) => event.returnValues)
+  dispatch(allOrdersLoaded(allOrders));
 
 }
 
