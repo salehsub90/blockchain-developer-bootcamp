@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { get } from 'lodash';
+import { create, get, reject } from 'lodash';
 import { ETHER_ADDRESS, tokens, ether, GREEN, RED } from '../helpers'
 import moment from 'moment';
 
@@ -23,6 +23,17 @@ export const contractsLoadedSelector = createSelector(
   (tl, el) => (tl && el)
 )
 
+// All orders
+const allOrdersLoaded = state => get(state, 'exchange.allOrders.loaded', false)
+const allOrders = state => get(state, 'exchange.allOrders.data', [])
+
+// Cancelled orders
+const cancelledOrdersLoaded = state => get(state, 'exchange.cancelledOrders.loaded', false)
+export const cancelledOrdersLoadedSelector = createSelector(cancelledOrdersLoaded, loaded => loaded)
+const cancelledOrders = state => get(state, 'exchange.cancelledOrders.data', [])
+export const cancelledOrdersSelector = createSelector(cancelledOrders, o => o)
+
+// filled orders
 const filledOrdersLoaded = state => get(state, 'exchange.filledOrders.loaded', false)
 export const filledOrdersLoadedSelector = createSelector(filledOrdersLoaded, loaded => loaded)
 
@@ -103,4 +114,40 @@ const tokenPriceClass = (tokenPrice, orderId, previousOrder) => {
   } else {
     return RED; //danger
   }
+}
+
+const openOrders = state => {
+  const all = allOrders(state)
+  const filled = filledOrders(state)
+  const cancelled = cancelledOrders(state)
+
+  const openOrders = reject(all, (order) => {
+    const orderFilled = filled.some((o) => o.id === order.id)
+    const orderCancelled = cancelled.some((o) => o.id === order.id)
+    return (orderFilled || orderCancelled);
+  })
+
+  return openOrders;
+}
+
+const orderBookLoaded = state => cancelledOrdersLoaded(state) && filledOrdersLoaded(state) && allOrdersLoaded(state)
+
+// create order book
+export const orderBookSelector = createSelector(
+  openOrders,
+  (orders) => {
+    // Decorate orders
+    orders = decorateOrcerBookOrders(orders)
+    return orders;
+  }
+)
+
+const decorateOrcerBookOrders = (orders) => {
+  return (
+    orders.map((order) => {
+      order = decorateOrder(order)
+// Decorate order book order
+      return (order)
+    })
+  )
 }
