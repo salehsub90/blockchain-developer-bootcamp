@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import Spinner from './Spinner'
 import {
   orderBookSelector,
@@ -17,16 +17,17 @@ const renderOrder = (order) => {
 }
 
 const showOrderBook = (props) => {
-  const { orderBook } = props;
-  return (
+  const { orderBook } = props
+
+  return(
     <tbody>
-      {orderBook.sellOrders.map((order)=> renderOrder(order, props))}
+      {orderBook.sellOrders.map((order) => renderOrder(order))}
       <tr>
         <th>DAPP</th>
         <th>DAPP/ETH</th>
         <th>ETH</th>
       </tr>
-      {orderBook.buyOrders.map((order)=> renderOrder(order, props))}
+      {orderBook.buyOrders.map((order) => renderOrder(order))}
     </tbody>
   )
 }
@@ -51,10 +52,11 @@ class OrderBook extends Component {
 }
 
 function mapStateToProps(state) {
+
   return {
     orderBook: orderBookSelector(state),
     showOrderBook: orderBookLoadedSelector(state)
   }
 }
 
-export default connect(mapStateToProps)(OrderBook)
+export default connect(mapStateToProps)(OrderBook);
