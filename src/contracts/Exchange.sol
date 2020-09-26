@@ -3,7 +3,6 @@ pragma solidity ^0.5.0;
 
 import "./Token.sol";
 
-
 //TODO:
 // [x] set the fee account
 // [x] Deposit Ether
