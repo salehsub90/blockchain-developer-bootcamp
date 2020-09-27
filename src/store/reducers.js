@@ -6,6 +6,8 @@ function web3(state = {}, action) {
       return { ...state, connection: action.connection }
     case 'WEB3_ACCOUNT_LOADED':
       return { ...state, account: action.account }
+    case 'ETHER_BALANCE_LOADED':
+      return { ...state, balance: action.balance }
     default:
       return state;
   }
@@ -15,6 +17,8 @@ function token(state = {}, action) {
   switch(action.type) {
     case 'TOKEN_LOADED':
       return { ...state, loaded: true, contract: action.contract }
+    case 'TOKEN_BALANCE_LOADED':
+      return { ...state, balance: action.balance }
     default:
       return state;
   }
@@ -50,7 +54,7 @@ function exchange(state = {}, action) {
       //prevent duplicate orders
       index = state.filledOrders.data.findIndex(order => order.id === action.order.id);
       if (index === -1) {
-        data = [...state.filledOrders.data, action.orders]
+        data = [...state.filledOrders.data, action.order]
       } else {
         data = state.filledOrders.data
       }
@@ -66,6 +70,15 @@ function exchange(state = {}, action) {
 
     case 'ORDER_FILLING':
       return { ...state, orderFilling: true }  
+    
+    case 'EXCHANGE_ETHER_BALANCE_LOADED':
+      return { ...state, etherBalance: action.balance }
+    case 'EXCHANGE_TOKEN_BALANCE_LOADED':
+      return { ...state, tokenBalance: action.balance }
+    case 'BALANCES_LOADING':
+      return { ...state, balancesLoading: true }
+    case 'BALANCES_LOADED':
+      return { ...state, balancesLoading: false }
 
     default:
       return state;
