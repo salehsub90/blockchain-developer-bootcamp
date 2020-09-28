@@ -352,3 +352,9 @@ export const exchangeTokenBalanceSelector = createSelector(
     return formatBalance(balance)
   }
 )
+
+const etherDepositAmount = state => get(state, 'exchange.etherDepositAmount', null)
+export const etherDepositAmountSelector = createSelector(etherDepositAmount, amount => amount)
+
+const etherWithdrawAmount = state => get(state, 'exchange.etherWithdrawAmount', null)
+export const etherWithdrawAmountSelector = createSelector(etherWithdrawAmount, amount => amount)
