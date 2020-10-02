@@ -19,6 +19,8 @@ import {
   exchangeTokenBalanceLoaded,
   balancesLoaded,
   balancesLoading,
+  buyOrderMaking,
+  sellOrderMaking,
   orderMade
 } from './actions'
 import { ETHER_ADDRESS } from '../helpers';
