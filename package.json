@@ -4,7 +4,9 @@
   "description": "Decentralized Ethereum Token Exchange",
   "author": "gregory@dappuniversity.com",
   "private": true,
-  "engines": {"node": "10.x"},
+  "engines": {
+    "node": "10.x"
+  },
   "dependencies": {
     "apexcharts": "3.6.3",
     "babel-polyfill": "6.26.0",

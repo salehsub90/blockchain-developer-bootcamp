@@ -27,6 +27,8 @@ import { ETHER_ADDRESS } from '../helpers';
 
 export const loadWeb3 = (dispatch) => {
   const web3 = new Web3(Web3.givenProvider || 'http://localhost:7545')
+  console.log("web3", web3);
+  debugger;
   dispatch(web3Loaded(web3));  
   return web3
 }
@@ -40,6 +42,7 @@ export const loadAccount = async (web3, dispatch) => {
 
 export const loadToken = async (web3, networkId, dispatch) => {
   try {
+    debugger;
     const token = new web3.eth.Contract(Token.abi, Token.networks[networkId].address);
     dispatch(TokenLoaded(token));
     return token;
